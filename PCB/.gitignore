@@ -25,5 +25,8 @@ _autosave-*
 *.xml
 *.csv
 
+# Project files
+*.kicad_prl
+
 # Output
 Output/
