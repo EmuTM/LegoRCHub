@@ -18,9 +18,6 @@
     <None Include="ATTiny3226_10ch.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PWMPin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PinDefinitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>

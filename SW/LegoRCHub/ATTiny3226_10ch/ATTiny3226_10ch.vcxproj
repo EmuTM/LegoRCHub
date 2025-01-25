@@ -114,7 +114,6 @@
   <ItemGroup>
     <ClInclude Include="IBus.h" />
     <ClInclude Include="PinDefinitions.h" />
-    <ClInclude Include="PWMPin.h" />
     <ClInclude Include="__vm\.ATTiny3226_10ch.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
