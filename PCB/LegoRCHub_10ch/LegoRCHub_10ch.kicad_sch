@@ -5,7 +5,7 @@
 	(uuid "798d43f7-598b-4cf1-ac7b-acbad96c8199")
 	(paper "A4")
 	(title_block
-		(title "Lego RC Hub 10ch v2")
+		(title "Lego RC Hub 10ch v3")
 	)
 	(lib_symbols
 		(symbol "Connector_Generic:Conn_01x01"
