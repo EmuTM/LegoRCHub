@@ -8,7 +8,7 @@
 	)
 	(paper "A4")
 	(title_block
-		(title "Lego RC Hub 10ch v3")
+		(title "Lego RC Hub 10ch v4")
 	)
 	(layers
 		(0 "F.Cu" signal)
@@ -654,7 +654,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3f8750d1-9ea8-41d9-8821-1c345879990b")
+			(uuid "8194b262-8f01-48a1-85d8-b0cd1f9255d9")
 		)
 		(pad "9" thru_hole circle
 			(at -0.65 1.3 180)
@@ -666,7 +666,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3f8750d1-9ea8-41d9-8821-1c345879990b")
+			(uuid "ede00bca-3064-4a9c-97c8-7641e113923d")
 		)
 		(pad "9" smd rect
 			(at 0 0 180)
@@ -675,7 +675,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3f8750d1-9ea8-41d9-8821-1c345879990b")
+			(uuid "9f314ff4-c947-4061-ac14-7d0879657561")
 		)
 		(pad "9" smd rect
 			(at 0 0 180)
@@ -684,7 +684,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3f8750d1-9ea8-41d9-8821-1c345879990b")
+			(uuid "f019e775-3375-490e-a48b-1cc5a3b1a810")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 -1.3 180)
@@ -696,7 +696,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3f8750d1-9ea8-41d9-8821-1c345879990b")
+			(uuid "01687c51-0574-41c3-ad78-f66651a63211")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 0 180)
@@ -708,7 +708,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3f8750d1-9ea8-41d9-8821-1c345879990b")
+			(uuid "a72debb5-c54b-4983-a0cf-3efa8550a514")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 1.3 180)
@@ -720,7 +720,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3f8750d1-9ea8-41d9-8821-1c345879990b")
+			(uuid "b5fdbdf0-770d-4704-846b-839b8f9697f8")
 		)
 		(embedded_fonts no)
 		(model "${KICAD8_3DMODEL_DIR}/Package_SO.3dshapes/Texas_HTSOP-8-1EP_3.9x4.9mm_P1.27mm_EP2.85x4.9mm_Mask2.4x3.1mm_ThermalVias.wrl"
@@ -1434,7 +1434,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3956822d-7d1b-4a45-aeed-5b705915c78e")
+			(uuid "cc299dbc-9188-4a6c-94a5-191504cbb6da")
 		)
 		(pad "9" thru_hole circle
 			(at -0.65 1.3 180)
@@ -1446,7 +1446,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3956822d-7d1b-4a45-aeed-5b705915c78e")
+			(uuid "d6476726-7400-4c05-90c5-1af45e6f1b22")
 		)
 		(pad "9" smd rect
 			(at 0 0 180)
@@ -1455,7 +1455,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3956822d-7d1b-4a45-aeed-5b705915c78e")
+			(uuid "a162b517-3bd9-4997-ba02-6d20ad4eae1a")
 		)
 		(pad "9" smd rect
 			(at 0 0 180)
@@ -1464,7 +1464,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3956822d-7d1b-4a45-aeed-5b705915c78e")
+			(uuid "ed367bc2-c518-44de-a716-f75d0518234c")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 -1.3 180)
@@ -1476,7 +1476,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3956822d-7d1b-4a45-aeed-5b705915c78e")
+			(uuid "9817e34a-a3a1-4607-96e2-37d87c606485")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 0 180)
@@ -1488,7 +1488,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3956822d-7d1b-4a45-aeed-5b705915c78e")
+			(uuid "2d135abc-ddfc-4354-86b8-ef22a3adee85")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 1.3 180)
@@ -1500,7 +1500,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "3956822d-7d1b-4a45-aeed-5b705915c78e")
+			(uuid "0c7368f0-c58f-4fd5-b451-6869734bb653")
 		)
 		(embedded_fonts no)
 		(model "${KICAD8_3DMODEL_DIR}/Package_SO.3dshapes/Texas_HTSOP-8-1EP_3.9x4.9mm_P1.27mm_EP2.85x4.9mm_Mask2.4x3.1mm_ThermalVias.wrl"
@@ -1814,7 +1814,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "e91f57ba-fb12-4ff0-9086-21191d15eb32")
+			(uuid "479bdc63-36c2-406f-be99-5ecc4a8f2034")
 		)
 		(pad "9" thru_hole circle
 			(at -0.65 1.3)
@@ -1826,7 +1826,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "e91f57ba-fb12-4ff0-9086-21191d15eb32")
+			(uuid "3cdc7042-8f17-4e6e-8c6b-28d35ab019ff")
 		)
 		(pad "9" smd rect
 			(at 0 0)
@@ -1835,7 +1835,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "e91f57ba-fb12-4ff0-9086-21191d15eb32")
+			(uuid "c644c2af-c690-49c1-90b5-0d3fd5062a60")
 		)
 		(pad "9" smd rect
 			(at 0 0)
@@ -1844,7 +1844,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "e91f57ba-fb12-4ff0-9086-21191d15eb32")
+			(uuid "73bde15a-c03d-4e3a-9e01-d397191c9cd2")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 -1.3)
@@ -1856,7 +1856,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "e91f57ba-fb12-4ff0-9086-21191d15eb32")
+			(uuid "0454c85d-8a87-4602-ba15-317952a65106")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 0)
@@ -1868,7 +1868,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "e91f57ba-fb12-4ff0-9086-21191d15eb32")
+			(uuid "caa2b834-4ef1-42d6-bac9-8934b7c94a2f")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 1.3)
@@ -1880,7 +1880,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "e91f57ba-fb12-4ff0-9086-21191d15eb32")
+			(uuid "6a31d32e-a63b-4c6c-aec0-1734248f471b")
 		)
 		(embedded_fonts no)
 		(model "${KICAD8_3DMODEL_DIR}/Package_SO.3dshapes/Texas_HTSOP-8-1EP_3.9x4.9mm_P1.27mm_EP2.85x4.9mm_Mask2.4x3.1mm_ThermalVias.wrl"
@@ -4882,7 +4882,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "1576638c-b556-4375-84c7-9e8144ec9c21")
+			(uuid "35c70a0d-4812-4cc5-b0ed-61e5bd03b2de")
 		)
 		(pad "9" thru_hole circle
 			(at -0.65 1.3)
@@ -4894,7 +4894,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "1576638c-b556-4375-84c7-9e8144ec9c21")
+			(uuid "d71b8d82-c2d3-42e9-a75f-9ad195c5ee34")
 		)
 		(pad "9" smd rect
 			(at 0 0)
@@ -4903,7 +4903,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "1576638c-b556-4375-84c7-9e8144ec9c21")
+			(uuid "0fb19c2d-3c64-4d1f-a3bc-179cd6b58899")
 		)
 		(pad "9" smd rect
 			(at 0 0)
@@ -4912,7 +4912,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "1576638c-b556-4375-84c7-9e8144ec9c21")
+			(uuid "995ee9e5-0a82-4051-a714-76e3854998af")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 -1.3)
@@ -4924,7 +4924,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "1576638c-b556-4375-84c7-9e8144ec9c21")
+			(uuid "b824fd68-15a8-4f85-aa61-908329a8b6eb")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 0)
@@ -4936,7 +4936,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "1576638c-b556-4375-84c7-9e8144ec9c21")
+			(uuid "e0dd0253-7484-445d-972e-42444c6f8071")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 1.3)
@@ -4948,7 +4948,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "1576638c-b556-4375-84c7-9e8144ec9c21")
+			(uuid "01dffb02-22ba-449c-8715-beeb49172a0a")
 		)
 		(embedded_fonts no)
 		(model "${KICAD8_3DMODEL_DIR}/Package_SO.3dshapes/Texas_HTSOP-8-1EP_3.9x4.9mm_P1.27mm_EP2.85x4.9mm_Mask2.4x3.1mm_ThermalVias.wrl"
@@ -5262,7 +5262,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "2335a331-d58f-4420-a7bf-6ce3cfafbb47")
+			(uuid "23a6d868-8302-41b8-a4c4-5c50283961ca")
 		)
 		(pad "9" thru_hole circle
 			(at -0.65 1.3)
@@ -5274,7 +5274,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "2335a331-d58f-4420-a7bf-6ce3cfafbb47")
+			(uuid "63ae21dc-b441-40c4-9dfb-f4cdf8100a79")
 		)
 		(pad "9" smd rect
 			(at 0 0)
@@ -5283,7 +5283,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "2335a331-d58f-4420-a7bf-6ce3cfafbb47")
+			(uuid "542bb798-3813-4cfb-886d-5a0791db0d1e")
 		)
 		(pad "9" smd rect
 			(at 0 0)
@@ -5292,7 +5292,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "2335a331-d58f-4420-a7bf-6ce3cfafbb47")
+			(uuid "3fa00d0c-d731-44b3-93ad-be2a214e9698")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 -1.3)
@@ -5304,7 +5304,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "2335a331-d58f-4420-a7bf-6ce3cfafbb47")
+			(uuid "abe33fee-8231-46b9-bb70-69414d5b2efc")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 0)
@@ -5316,7 +5316,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "2335a331-d58f-4420-a7bf-6ce3cfafbb47")
+			(uuid "2ef43e6f-1b22-44f4-b5c4-afe70868d4be")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 1.3)
@@ -5328,7 +5328,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "2335a331-d58f-4420-a7bf-6ce3cfafbb47")
+			(uuid "9feacae8-2d38-4960-8893-0c413d21dae8")
 		)
 		(embedded_fonts no)
 		(model "${KICAD8_3DMODEL_DIR}/Package_SO.3dshapes/Texas_HTSOP-8-1EP_3.9x4.9mm_P1.27mm_EP2.85x4.9mm_Mask2.4x3.1mm_ThermalVias.wrl"
@@ -6539,7 +6539,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "0c49635f-66fd-4e6a-be41-37cf8ecef8a8")
+			(uuid "1cff9903-95b9-46f7-9542-53a70ec1675d")
 		)
 		(pad "9" thru_hole circle
 			(at -0.65 1.3 180)
@@ -6551,7 +6551,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "0c49635f-66fd-4e6a-be41-37cf8ecef8a8")
+			(uuid "e270fcf2-858e-4ae2-896f-21a9b70a6b81")
 		)
 		(pad "9" smd rect
 			(at 0 0 180)
@@ -6560,7 +6560,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "0c49635f-66fd-4e6a-be41-37cf8ecef8a8")
+			(uuid "3b48f346-68c1-4162-8540-1a8b63491b33")
 		)
 		(pad "9" smd rect
 			(at 0 0 180)
@@ -6569,7 +6569,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "0c49635f-66fd-4e6a-be41-37cf8ecef8a8")
+			(uuid "a2618cc7-83d2-4f9c-9df6-fdb510f1bfce")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 -1.3 180)
@@ -6581,7 +6581,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "0c49635f-66fd-4e6a-be41-37cf8ecef8a8")
+			(uuid "8d338fc6-0992-48f3-9525-7d8bd1add908")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 0 180)
@@ -6593,7 +6593,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "0c49635f-66fd-4e6a-be41-37cf8ecef8a8")
+			(uuid "6b6bd8f1-e841-49a3-853d-e78a526923fa")
 		)
 		(pad "9" thru_hole circle
 			(at 0.65 1.3 180)
@@ -6605,7 +6605,7 @@
 			(net 1 "GND")
 			(pinfunction "GND")
 			(pintype "passive")
-			(uuid "0c49635f-66fd-4e6a-be41-37cf8ecef8a8")
+			(uuid "29d58cbc-0bf9-4315-a42d-f7fd43b1f460")
 		)
 		(embedded_fonts no)
 		(model "${KICAD8_3DMODEL_DIR}/Package_SO.3dshapes/Texas_HTSOP-8-1EP_3.9x4.9mm_P1.27mm_EP2.85x4.9mm_Mask2.4x3.1mm_ThermalVias.wrl"
