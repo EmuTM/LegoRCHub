@@ -74,23 +74,24 @@ bool IBus::validateChecksum(uint8_t* packet)
 	uint16_t receivedChecksum = (packet[IBUS_PACKET_SIZE - 2] | (packet[IBUS_PACKET_SIZE - 1] << 8));
 
 
-	//if (calculatedChecksum != receivedChecksum)
-	//{
-	//		this->print->print("Calc:");
-	//		this->print->print(calculatedChecksum, HEX);
-	//		this->print->print(" ");
-	//		this->print->print("Rec:");
-	//		this->print->print(receivedChecksum, HEX);
-	//		this->print->println();
+	if (this->print
+		&& calculatedChecksum != receivedChecksum)
+	{
+		this->print->print("Calc:");
+		this->print->print(calculatedChecksum, HEX);
+		this->print->print(" ");
+		this->print->print("Rec:");
+		this->print->print(receivedChecksum, HEX);
+		this->print->println();
 
-	//		this->print->print("PCK:");
-	//		for (int i = 0; i < IBUS_PACKET_SIZE; i++)
-	//		{
-	//			this->print->print(this->ibusPacket[i], HEX);
-	//			this->print->print(" ");
-	//		}
-	//		this->print->println();
-	//}
+		this->print->print("PCK:");
+		for (int i = 0; i < IBUS_PACKET_SIZE; i++)
+		{
+			this->print->print(this->ibusPacket[i], HEX);
+			this->print->print(" ");
+		}
+		this->print->println();
+	}
 
 
 	return calculatedChecksum == receivedChecksum;
@@ -101,12 +102,31 @@ void IBus::decodeChannels(uint8_t* packet, uint16_t* channels)
 	{
 		//little-endian
 		channels[a] = packet[2 + a * 2] | (packet[3 + a * 2] << 8);
+
+		if (channels[a] < IBUS_MIN)
+		{
+			channels[a] = IBUS_MIN;
+		}
+		else if (channels[a] > IBUS_MAX)
+		{
+			channels[a] = IBUS_MAX;
+		}
+		//allow for zero with some tolerance
+		else if (channels[a] > (IBUS_MID - IBUS_MID_TOLERANCE)
+			&& channels[a] < (IBUS_MID + IBUS_MID_TOLERANCE))
+		{
+			channels[a] = IBUS_MID;
+		}
+
 	}
 
-	//for (int a = 0; a < IBUS_CHANNEL_COUNT; a++)
-	//{
-	//	this->print->print(channels[a]);
-	//	this->print->print(";");
-	//}
-	//this->print->println();
+	if (this->print)
+	{
+		for (int a = 0; a < IBUS_CHANNEL_COUNT; a++)
+		{
+			this->print->print(channels[a]);
+			this->print->print(";");
+		}
+		this->print->println();
+	}
 }

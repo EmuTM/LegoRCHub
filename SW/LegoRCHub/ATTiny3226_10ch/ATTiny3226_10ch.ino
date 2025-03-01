@@ -1,4 +1,4 @@
-#define VERSION 1
+#define VERSION 2
 
 
 //#define DEBUG
@@ -28,6 +28,7 @@ volatile uint32_t lastMillis = 0; //stores last millis for frequency calculation
 #endif
 #else
 IBus iBus(&Serial);
+uint16_t val;
 #endif
 
 
@@ -111,7 +112,7 @@ void loop()
 		//first 12 (6*2) channels for pwm pins
 		for (int a = 0; a < 6; a++)
 		{
-			uint16_t val = iBus.channels[iBusMap[a]];
+			val = iBus.channels[iBusMap[a]];
 
 			if (val > IBUS_MID)
 			{
@@ -166,7 +167,7 @@ void loop()
 		//next 4 channels go to servo pins
 		for (int a = 0; a < 4; a++)
 		{
-			uint16_t val = iBus.channels[iBusMap[a + 6]];
+			val = iBus.channels[iBusMap[a + 6]];
 			servoChannels[a].servo.write(map(val, IBUS_MIN, IBUS_MAX, SERVO_MIN, SERVO_MAX));
 
 		}
