@@ -1,4 +1,4 @@
-#define VERSION 2
+#define VERSION 3
 
 
 //#define DEBUG
@@ -59,10 +59,10 @@ void setup()
 		//interrupt_frequency_Hz = timer_frequency_Hz / (TCA0.SINGLE.PER[timer period] + 1)
 		//pwm_frequency_Hz = timer_frequency_Hz / resolution
 
-		//IMPORTANT NOTE: for a pwm resolution of 255, this gives around 150 Hz pwm signals 
-		//which seems comfortable for the processor as well as the motors
-		TCA0.SINGLE.CTRLA = TCA_SINGLE_CLKSEL_enum::TCA_SINGLE_CLKSEL_DIV8_gc | TCA_SINGLE_ENABLE_bm;
-		TCA0.SINGLE.PER = 31;
+		//IMPORTANT NOTE: the selected frequency and period is about the limit of the processor with current code
+		//for a pwm resolution of 32, this gives around 1.25 KHz pwm signals which drives the motors reasonably well even at higher voltages
+		TCA0.SINGLE.CTRLA = TCA_SINGLE_CLKSEL_enum::TCA_SINGLE_CLKSEL_DIV16_gc | TCA_SINGLE_ENABLE_bm;
+		TCA0.SINGLE.PER = 25;
 		TCA0.SINGLE.INTCTRL = TCA_SINGLE_OVF_bm; //enable overflow interrupt
 	}
 
