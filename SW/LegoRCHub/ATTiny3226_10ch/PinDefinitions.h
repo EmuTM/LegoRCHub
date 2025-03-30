@@ -81,7 +81,7 @@ pwmPin_t* pwmChannels[6 * 2]
 	&paPins[1], //ch5_up (ch6_2)
 	&pbPins[0]  //ch5_down (ch6_3)
 };
-
+const uint8_t pwmChannelsCount = sizeof(pwmChannels) / sizeof(pwmChannels[0]);
 
 #include <Servo_megaTinyCore.h>
 typedef struct ServoPin
@@ -104,6 +104,15 @@ typedef struct ServoPin
 
 //IMPORTANT NOTE: maps servo channels to pins that drive servos
 //THIS IS PCB DESIGN DEPENDANT!
+#ifdef DEBUG
+const servoPin_t servoChannels[3]
+{
+	//{PIN_PC3, Servo()}, //pin reserved for debug!
+	{PIN_PC0, Servo()}, //ch8
+	{PIN_PC2, Servo()}, //ch9
+	{PIN_PC1, Servo()} //ch10
+};
+#else
 const servoPin_t servoChannels[4]
 {
 	{PIN_PC3, Servo()}, //ch7
@@ -111,8 +120,8 @@ const servoPin_t servoChannels[4]
 	{PIN_PC2, Servo()}, //ch9
 	{PIN_PC1, Servo()} //ch10
 };
+#endif
 const uint8_t servoChannelsCount = sizeof(servoChannels) / sizeof(servoChannels[0]);
-
 
 #include "IBus.h"
 
@@ -120,7 +129,7 @@ const uint8_t servoChannelsCount = sizeof(servoChannels) / sizeof(servoChannels[
 //number in here define the pwm/servo channel (channels 0-5 are pwm; channels 6-9 are servos) with respect to iBus channel
 uint8_t iBusMap[IBUS_CHANNEL_COUNT]
 {
-	0, 
+	0,
 	1,
 	2,
 	3,
