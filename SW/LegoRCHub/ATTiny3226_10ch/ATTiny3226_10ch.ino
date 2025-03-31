@@ -32,6 +32,24 @@ IBus iBus(&Serial);
 
 uint16_t val;
 
+volatile pwmPin_t* activePWMChannels[6]
+{
+	//&pwmChannels[0],
+	//&pwmChannels[2],
+	//&pwmChannels[4],
+	//&pwmChannels[6],
+	//&pwmChannels[8],
+	//&pwmChannels[10]
+
+	&pwmChannels[1],
+	&pwmChannels[3],
+	&pwmChannels[5],
+	&pwmChannels[7],
+	&pwmChannels[9],
+	&pwmChannels[11]
+};
+const uint8_t activePWMChannelsCount = sizeof(activePWMChannels) / sizeof(activePWMChannels[0]);
+
 
 void setup()
 {
@@ -50,9 +68,9 @@ void setup()
 	//disable TX in the USART peripheral, so the tx pin is available (for pwm)
 	USART0.CTRLB &= ~USART_TXEN_bm;
 
-	//configure the following pins as output (for pwm)
-	PORTA.DIRSET = paPinsBitmask;
-	PORTB.DIRSET = pbPinsBitmask;
+	//configure all pins on PORTA and PORTB as output (for pwm)
+	PORTA.DIRSET = 0xfe; //PA0 is UPDI
+	PORTB.DIRSET = 0x37; //PB3 is RX
 
 	//set ISR on timer A
 	{
@@ -60,8 +78,9 @@ void setup()
 		//interrupt_frequency_Hz = timer_frequency_Hz / (TCA0.SINGLE.PER[timer period] + 1)
 		//pwm_frequency_Hz = timer_frequency_Hz / resolution
 
+		//3kHz
 		TCA0.SINGLE.CTRLA = TCA_SINGLE_CLKSEL_enum::TCA_SINGLE_CLKSEL_DIV16_gc | TCA_SINGLE_ENABLE_bm;
-		TCA0.SINGLE.PER = 15;
+		TCA0.SINGLE.PER = 12;
 		TCA0.SINGLE.INTCTRL = TCA_SINGLE_OVF_bm; //enable overflow interrupt
 	}
 
@@ -124,8 +143,9 @@ void loop()
 				mySerial.println(map(val, IBUS_MID, IBUS_MAX, 0, RESOLUTION));
 #endif
 
-				pwmChannels[2 * a]->dutyCycle = map(val, IBUS_MID, IBUS_MAX, 0, RESOLUTION);
-				pwmChannels[(2 * a) + 1]->dutyCycle = PWM_OFF;
+				activePWMChannels[a] = &pwmChannels[2 * a];
+				pwmChannels[2 * a].dutyCycle = map(val, IBUS_MID, IBUS_MAX, 0, RESOLUTION);
+				pwmChannels[(2 * a) + 1].dutyCycle = PWM_OFF;
 			}
 			else if (val < IBUS_MID)
 			{
@@ -136,8 +156,9 @@ void loop()
 				mySerial.println(map(val, IBUS_MID, IBUS_MIN, 0, RESOLUTION));
 #endif
 
-				pwmChannels[2 * a]->dutyCycle = PWM_OFF;
-				pwmChannels[(2 * a) + 1]->dutyCycle = map(val, IBUS_MID, IBUS_MIN, 0, RESOLUTION);
+				activePWMChannels[a] = &pwmChannels[(2 * a) + 1];
+				pwmChannels[2 * a].dutyCycle = PWM_OFF;
+				pwmChannels[(2 * a) + 1].dutyCycle = map(val, IBUS_MID, IBUS_MIN, 0, RESOLUTION);
 			}
 			else
 			{
@@ -147,7 +168,7 @@ void loop()
 				mySerial.println("MID");
 #endif
 
-				pwmChannels[2 * a]->dutyCycle = pwmChannels[(2 * a) + 1]->dutyCycle = PWM_OFF;
+				pwmChannels[2 * a].dutyCycle = pwmChannels[(2 * a) + 1].dutyCycle = PWM_OFF;
 			}
 		}
 
@@ -183,172 +204,86 @@ ISR(TCA0_OVF_vect)
 
 	{
 #ifdef PWM_INVERTED
-		if (currentPwm > paPins[1].dutyCycle)
+		if (currentPwm > activePWMChannels[0]->dutyCycle)
 #else
-		if (currentPwm < paPins[1].dutyCycle)
+		if (currentPwm < activePWMChannels[0]->dutyCycle)
 #endif
 		{
-			PORTA.OUTSET = paPins[1].bitMask; //set pin high
+			activePWMChannels[0]->port->OUTSET = activePWMChannels[0]->bitMask; //set pin high
 		}
 		else
 		{
-			PORTA.OUTCLR = paPins[1].bitMask; //set pin low
+			activePWMChannels[0]->port->OUTCLR = activePWMChannels[0]->bitMask; //set pin low
 		}
 	}
 	{
 #ifdef PWM_INVERTED
-		if (currentPwm > paPins[2].dutyCycle)
+		if (currentPwm > activePWMChannels[1]->dutyCycle)
 #else
-		if (currentPwm < paPins[2].dutyCycle)
+		if (currentPwm < activePWMChannels[1]->dutyCycle)
 #endif
 		{
-			PORTA.OUTSET = paPins[2].bitMask; //set pin high
+			activePWMChannels[1]->port->OUTSET = activePWMChannels[1]->bitMask; //set pin high
 		}
 		else
 		{
-			PORTA.OUTCLR = paPins[2].bitMask; //set pin low
+			activePWMChannels[1]->port->OUTCLR = activePWMChannels[1]->bitMask; //set pin low
 		}
 	}
 	{
 #ifdef PWM_INVERTED
-		if (currentPwm > paPins[3].dutyCycle)
+		if (currentPwm > activePWMChannels[2]->dutyCycle)
 #else
-		if (currentPwm < paPins[3].dutyCycle)
+		if (currentPwm < activePWMChannels[2]->dutyCycle)
 #endif
 		{
-			PORTA.OUTSET = paPins[3].bitMask; //set pin high
+			activePWMChannels[2]->port->OUTSET = activePWMChannels[2]->bitMask; //set pin high
 		}
 		else
 		{
-			PORTA.OUTCLR = paPins[3].bitMask; //set pin low
+			activePWMChannels[2]->port->OUTCLR = activePWMChannels[2]->bitMask; //set pin low
 		}
 	}
 	{
 #ifdef PWM_INVERTED
-		if (currentPwm > paPins[4].dutyCycle)
+		if (currentPwm > activePWMChannels[3]->dutyCycle)
 #else
-		if (currentPwm < paPins[4].dutyCycle)
+		if (currentPwm < activePWMChannels[3]->dutyCycle)
 #endif
 		{
-			PORTA.OUTSET = paPins[4].bitMask; //set pin high
+			activePWMChannels[3]->port->OUTSET = activePWMChannels[3]->bitMask; //set pin high
 		}
 		else
 		{
-			PORTA.OUTCLR = paPins[4].bitMask; //set pin low
+			activePWMChannels[3]->port->OUTCLR = activePWMChannels[3]->bitMask; //set pin low
 		}
 	}
 	{
 #ifdef PWM_INVERTED
-		if (currentPwm > paPins[5].dutyCycle)
+		if (currentPwm > activePWMChannels[4]->dutyCycle)
 #else
-		if (currentPwm < paPins[5].dutyCycle)
+		if (currentPwm < activePWMChannels[4]->dutyCycle)
 #endif
 		{
-			PORTA.OUTSET = paPins[5].bitMask; //set pin high
+			activePWMChannels[4]->port->OUTSET = activePWMChannels[4]->bitMask; //set pin high
 		}
 		else
 		{
-			PORTA.OUTCLR = paPins[5].bitMask; //set pin low
+			activePWMChannels[4]->port->OUTCLR = activePWMChannels[4]->bitMask; //set pin low
 		}
 	}
 	{
 #ifdef PWM_INVERTED
-		if (currentPwm > paPins[6].dutyCycle)
+		if (currentPwm > activePWMChannels[5]->dutyCycle)
 #else
-		if (currentPwm < paPins[6].dutyCycle)
+		if (currentPwm < activePWMChannels[5]->dutyCycle)
 #endif
 		{
-			PORTA.OUTSET = paPins[6].bitMask; //set pin high
+			activePWMChannels[5]->port->OUTSET = activePWMChannels[5]->bitMask; //set pin high
 		}
 		else
 		{
-			PORTA.OUTCLR = paPins[6].bitMask; //set pin low
-		}
-	}
-	{
-#ifdef PWM_INVERTED
-		if (currentPwm > paPins[7].dutyCycle)
-#else
-		if (currentPwm < paPins[7].dutyCycle)
-#endif
-		{
-			PORTA.OUTSET = paPins[7].bitMask; //set pin high
-		}
-		else
-		{
-			PORTA.OUTCLR = paPins[7].bitMask; //set pin low
-		}
-	}
-
-
-	{
-#ifdef PWM_INVERTED
-		if (currentPwm > pbPins[0].dutyCycle)
-#else
-		if (currentPwm < pbPins[0].dutyCycle)
-#endif
-		{
-			PORTB.OUTSET = pbPins[0].bitMask; //set pin high
-		}
-		else
-		{
-			PORTB.OUTCLR = pbPins[0].bitMask; //set pin low
-		}
-	}
-	{
-#ifdef PWM_INVERTED
-		if (currentPwm > pbPins[1].dutyCycle)
-#else
-		if (currentPwm < pbPins[1].dutyCycle)
-#endif
-		{
-			PORTB.OUTSET = pbPins[1].bitMask; //set pin high
-		}
-		else
-		{
-			PORTB.OUTCLR = pbPins[1].bitMask; //set pin low
-		}
-	}
-	{
-#ifdef PWM_INVERTED
-		if (currentPwm > pbPins[2].dutyCycle)
-#else
-		if (currentPwm < pbPins[2].dutyCycle)
-#endif
-		{
-			PORTB.OUTSET = pbPins[2].bitMask; //set pin high
-		}
-		else
-		{
-			PORTB.OUTCLR = pbPins[2].bitMask; //set pin low
-		}
-	}
-	{
-#ifdef PWM_INVERTED
-		if (currentPwm > pbPins[4].dutyCycle)
-#else
-		if (currentPwm < pbPins[4].dutyCycle)
-#endif
-		{
-			PORTB.OUTSET = pbPins[4].bitMask; //set pin high
-		}
-		else
-		{
-			PORTB.OUTCLR = pbPins[4].bitMask; //set pin low
-		}
-	}
-	{
-#ifdef PWM_INVERTED
-		if (currentPwm > pbPins[5].dutyCycle)
-#else
-		if (currentPwm < pbPins[5].dutyCycle)
-#endif
-		{
-			PORTB.OUTSET = pbPins[5].bitMask; //set pin high
-		}
-		else
-		{
-			PORTB.OUTCLR = pbPins[5].bitMask; //set pin low
+			activePWMChannels[5]->port->OUTCLR = activePWMChannels[5]->bitMask; //set pin low
 		}
 	}
 
