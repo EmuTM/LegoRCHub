@@ -25,7 +25,7 @@ typedef struct PWMPin
 //#define PWM_INVERTED
 
 //IMPORTANT NOTE: this resolution is interdependant on timer A settings and should not be changed per se
-#define RESOLUTION 32
+#define RESOLUTION 31
 
 //max pwm = slow decay (brake); 0 = fast decay (coast)
 #define PWM_OFF 0

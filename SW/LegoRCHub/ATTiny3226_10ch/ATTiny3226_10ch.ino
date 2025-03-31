@@ -60,10 +60,8 @@ void setup()
 		//interrupt_frequency_Hz = timer_frequency_Hz / (TCA0.SINGLE.PER[timer period] + 1)
 		//pwm_frequency_Hz = timer_frequency_Hz / resolution
 
-		//IMPORTANT NOTE: the selected frequency and period is about the limit of the processor with current code
-		//for a pwm resolution of 32, this gives around 1.25 KHz pwm signals which drives the motors reasonably well even at higher voltages
 		TCA0.SINGLE.CTRLA = TCA_SINGLE_CLKSEL_enum::TCA_SINGLE_CLKSEL_DIV16_gc | TCA_SINGLE_ENABLE_bm;
-		TCA0.SINGLE.PER = 25;
+		TCA0.SINGLE.PER = 15;
 		TCA0.SINGLE.INTCTRL = TCA_SINGLE_OVF_bm; //enable overflow interrupt
 	}
 
@@ -71,6 +69,8 @@ void setup()
 	ServoPin::attachAll(servoChannels, servoChannelsCount);
 
 	interrupts();
+
+
 }
 
 void loop()
@@ -181,50 +181,179 @@ ISR(TCA0_OVF_vect)
 {
 	static uint8_t currentPwm = 0;
 
-
-	for (uint8_t a = 0; a < paPinsCount; a++)
 	{
 #ifdef PWM_INVERTED
-		if (currentPwm > paPins[a].dutyCycle)
+		if (currentPwm > paPins[1].dutyCycle)
 #else
-		if (currentPwm < paPins[a].dutyCycle)
+		if (currentPwm < paPins[1].dutyCycle)
 #endif
 		{
-			PORTA.OUTSET = paPins[a].bitMask; //set pin high
+			PORTA.OUTSET = paPins[1].bitMask; //set pin high
 		}
 		else
 		{
-			PORTA.OUTCLR = paPins[a].bitMask; //set pin low
+			PORTA.OUTCLR = paPins[1].bitMask; //set pin low
 		}
 	}
-
-
-	for (uint8_t a = 0; a < pbPinsCount; a++)
 	{
 #ifdef PWM_INVERTED
-		if (currentPwm > pbPins[a].dutyCycle)
+		if (currentPwm > paPins[2].dutyCycle)
 #else
-		if (currentPwm < pbPins[a].dutyCycle)
+		if (currentPwm < paPins[2].dutyCycle)
 #endif
 		{
-			PORTB.OUTSET = pbPins[a].bitMask; //set pin high
+			PORTA.OUTSET = paPins[2].bitMask; //set pin high
 		}
 		else
 		{
-			PORTB.OUTCLR = pbPins[a].bitMask; //set pin low
+			PORTA.OUTCLR = paPins[2].bitMask; //set pin low
+		}
+	}
+	{
+#ifdef PWM_INVERTED
+		if (currentPwm > paPins[3].dutyCycle)
+#else
+		if (currentPwm < paPins[3].dutyCycle)
+#endif
+		{
+			PORTA.OUTSET = paPins[3].bitMask; //set pin high
+		}
+		else
+		{
+			PORTA.OUTCLR = paPins[3].bitMask; //set pin low
+		}
+	}
+	{
+#ifdef PWM_INVERTED
+		if (currentPwm > paPins[4].dutyCycle)
+#else
+		if (currentPwm < paPins[4].dutyCycle)
+#endif
+		{
+			PORTA.OUTSET = paPins[4].bitMask; //set pin high
+		}
+		else
+		{
+			PORTA.OUTCLR = paPins[4].bitMask; //set pin low
+		}
+	}
+	{
+#ifdef PWM_INVERTED
+		if (currentPwm > paPins[5].dutyCycle)
+#else
+		if (currentPwm < paPins[5].dutyCycle)
+#endif
+		{
+			PORTA.OUTSET = paPins[5].bitMask; //set pin high
+		}
+		else
+		{
+			PORTA.OUTCLR = paPins[5].bitMask; //set pin low
+		}
+	}
+	{
+#ifdef PWM_INVERTED
+		if (currentPwm > paPins[6].dutyCycle)
+#else
+		if (currentPwm < paPins[6].dutyCycle)
+#endif
+		{
+			PORTA.OUTSET = paPins[6].bitMask; //set pin high
+		}
+		else
+		{
+			PORTA.OUTCLR = paPins[6].bitMask; //set pin low
+		}
+	}
+	{
+#ifdef PWM_INVERTED
+		if (currentPwm > paPins[7].dutyCycle)
+#else
+		if (currentPwm < paPins[7].dutyCycle)
+#endif
+		{
+			PORTA.OUTSET = paPins[7].bitMask; //set pin high
+		}
+		else
+		{
+			PORTA.OUTCLR = paPins[7].bitMask; //set pin low
 		}
 	}
 
 
-	//increase or reset the counter at the end of the period
-	if (currentPwm++ >= RESOLUTION)
 	{
-#ifdef DEBUG_ISR_FREQ
-		isrCounter++;
+#ifdef PWM_INVERTED
+		if (currentPwm > pbPins[0].dutyCycle)
+#else
+		if (currentPwm < pbPins[0].dutyCycle)
 #endif
-		currentPwm = 0;
+		{
+			PORTB.OUTSET = pbPins[0].bitMask; //set pin high
+		}
+		else
+		{
+			PORTB.OUTCLR = pbPins[0].bitMask; //set pin low
+		}
+	}
+	{
+#ifdef PWM_INVERTED
+		if (currentPwm > pbPins[1].dutyCycle)
+#else
+		if (currentPwm < pbPins[1].dutyCycle)
+#endif
+		{
+			PORTB.OUTSET = pbPins[1].bitMask; //set pin high
+		}
+		else
+		{
+			PORTB.OUTCLR = pbPins[1].bitMask; //set pin low
+		}
+	}
+	{
+#ifdef PWM_INVERTED
+		if (currentPwm > pbPins[2].dutyCycle)
+#else
+		if (currentPwm < pbPins[2].dutyCycle)
+#endif
+		{
+			PORTB.OUTSET = pbPins[2].bitMask; //set pin high
+		}
+		else
+		{
+			PORTB.OUTCLR = pbPins[2].bitMask; //set pin low
+		}
+	}
+	{
+#ifdef PWM_INVERTED
+		if (currentPwm > pbPins[4].dutyCycle)
+#else
+		if (currentPwm < pbPins[4].dutyCycle)
+#endif
+		{
+			PORTB.OUTSET = pbPins[4].bitMask; //set pin high
+		}
+		else
+		{
+			PORTB.OUTCLR = pbPins[4].bitMask; //set pin low
+		}
+	}
+	{
+#ifdef PWM_INVERTED
+		if (currentPwm > pbPins[5].dutyCycle)
+#else
+		if (currentPwm < pbPins[5].dutyCycle)
+#endif
+		{
+			PORTB.OUTSET = pbPins[5].bitMask; //set pin high
+		}
+		else
+		{
+			PORTB.OUTCLR = pbPins[5].bitMask; //set pin low
+		}
 	}
 
+	//increases or resets currentPwm; this is a trickery, from chatgpt, like modulo but faster
+	currentPwm = (currentPwm + 1) & RESOLUTION;
 
 	//clear the interrupt flag
 	TCA0.SINGLE.INTFLAGS = TCA_SINGLE_OVF_bm;
