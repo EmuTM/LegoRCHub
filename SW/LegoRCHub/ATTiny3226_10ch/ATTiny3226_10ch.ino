@@ -12,6 +12,7 @@
 
 #ifdef DEBUG
 #include <SoftwareSerial.h>
+
 #endif
 #include "IBus.h"
 #include "PinDefinitions.h"
@@ -30,25 +31,20 @@ volatile uint32_t lastMillis = 0; //stores last millis for frequency calculation
 IBus iBus(&Serial);
 #endif
 
-uint16_t val;
 
+//state
 volatile pwmPin_t* activePWMChannels[6]
 {
-	//&pwmChannels[0],
-	//&pwmChannels[2],
-	//&pwmChannels[4],
-	//&pwmChannels[6],
-	//&pwmChannels[8],
-	//&pwmChannels[10]
-
-	&pwmChannels[1],
-	&pwmChannels[3],
-	&pwmChannels[5],
-	&pwmChannels[7],
-	&pwmChannels[9],
-	&pwmChannels[11]
+	&pwmChannels[0],
+	&pwmChannels[2],
+	&pwmChannels[4],
+	&pwmChannels[6],
+	&pwmChannels[8],
+	&pwmChannels[10]
 };
-const uint8_t activePWMChannelsCount = sizeof(activePWMChannels) / sizeof(activePWMChannels[0]);
+
+volatile uint16_t previousVals[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+//state
 
 
 void setup()
@@ -78,7 +74,7 @@ void setup()
 		//interrupt_frequency_Hz = timer_frequency_Hz / (TCA0.SINGLE.PER[timer period] + 1)
 		//pwm_frequency_Hz = timer_frequency_Hz / resolution
 
-		//3kHz
+		//3kHz with PWM_RESOLUTION being 31
 		TCA0.SINGLE.CTRLA = TCA_SINGLE_CLKSEL_enum::TCA_SINGLE_CLKSEL_DIV16_gc | TCA_SINGLE_ENABLE_bm;
 		TCA0.SINGLE.PER = 12;
 		TCA0.SINGLE.INTCTRL = TCA_SINGLE_OVF_bm; //enable overflow interrupt
@@ -122,53 +118,57 @@ void loop()
 #ifdef DEBUG
 		for (int a = 0; a < IBUS_CHANNEL_COUNT; a++)
 		{
-			mySerial.print(iBus.channels[a]);
+			mySerial.print(iBus.channels[iBusMap[a]]);
 			mySerial.print(";");
 		}
 		mySerial.println();
 #endif
 
-
 		//first 12 (6*2) channels for pwm pins
 		for (int a = 0; a < 6; a++)
 		{
-			val = iBus.channels[iBusMap[a]];
+			uint16_t val = iBus.channels[iBusMap[a]];
 
-			if (val > IBUS_MID)
+			if (val != previousVals[a])
 			{
+				previousVals[a] = val;
+
+				if (val > IBUS_MID)
+				{
 #ifdef DEBUG
-				mySerial.print("CH ");
-				mySerial.print(a);
-				mySerial.print(" UP:");
-				mySerial.println(map(val, IBUS_MID, IBUS_MAX, 0, RESOLUTION));
+					mySerial.print("CH ");
+					mySerial.print(a);
+					mySerial.print(" UP:");
+					mySerial.println(map(val, IBUS_MID, IBUS_MAX, 0, PWM_RESOLUTION));
 #endif
 
-				activePWMChannels[a] = &pwmChannels[2 * a];
-				pwmChannels[2 * a].dutyCycle = map(val, IBUS_MID, IBUS_MAX, 0, RESOLUTION);
-				pwmChannels[(2 * a) + 1].dutyCycle = PWM_OFF;
-			}
-			else if (val < IBUS_MID)
-			{
+					activePWMChannels[a] = &pwmChannels[2 * a];
+					pwmChannels[2 * a].dutyCycle = map(val, IBUS_MID, IBUS_MAX, 0, PWM_RESOLUTION);
+					pwmChannels[(2 * a) + 1].dutyCycle = PWM_OFF;
+				}
+				else if (val < IBUS_MID)
+				{
 #ifdef DEBUG
-				mySerial.print("CH ");
-				mySerial.print(a);
-				mySerial.print(" DOWN:");
-				mySerial.println(map(val, IBUS_MID, IBUS_MIN, 0, RESOLUTION));
+					mySerial.print("CH ");
+					mySerial.print(a);
+					mySerial.print(" DOWN:");
+					mySerial.println(map(val, IBUS_MID, IBUS_MIN, 0, PWM_RESOLUTION));
 #endif
 
-				activePWMChannels[a] = &pwmChannels[(2 * a) + 1];
-				pwmChannels[2 * a].dutyCycle = PWM_OFF;
-				pwmChannels[(2 * a) + 1].dutyCycle = map(val, IBUS_MID, IBUS_MIN, 0, RESOLUTION);
-			}
-			else
-			{
+					activePWMChannels[a] = &pwmChannels[(2 * a) + 1];
+					pwmChannels[2 * a].dutyCycle = PWM_OFF;
+					pwmChannels[(2 * a) + 1].dutyCycle = map(val, IBUS_MID, IBUS_MIN, 0, PWM_RESOLUTION);
+				}
+				else
+				{
 #ifdef DEBUG
-				mySerial.print("CH ");
-				mySerial.print(a);
-				mySerial.println("MID");
+					mySerial.print("CH ");
+					mySerial.print(a);
+					mySerial.println("MID");
 #endif
 
-				pwmChannels[2 * a].dutyCycle = pwmChannels[(2 * a) + 1].dutyCycle = PWM_OFF;
+					pwmChannels[2 * a].dutyCycle = pwmChannels[(2 * a) + 1].dutyCycle = PWM_OFF;
+				}
 			}
 		}
 
@@ -189,15 +189,19 @@ void loop()
 		//next 4 channels go to servo pins
 		for (int a = 0; a < servoChannelsCount; a++)
 		{
-			val = iBus.channels[iBusMap[a + 6]];
-			servoChannels[a].servo.write(map(val, IBUS_MIN, IBUS_MAX, SERVO_MIN, SERVO_MAX));
+			uint16_t val = iBus.channels[iBusMap[a + 6]];
 
+			if (val != previousVals[a + 6])
+			{
+				previousVals[a + 6] = val;
+				servoChannels[a].servo.write(map(val, IBUS_MIN, IBUS_MAX, SERVO_MIN, SERVO_MAX));
+			}
 		}
 	}
 #endif
 }
 
-//isr for sw pwm
+//SW PWM ISR
 ISR(TCA0_OVF_vect)
 {
 	static uint8_t currentPwm = 0;
@@ -288,7 +292,7 @@ ISR(TCA0_OVF_vect)
 	}
 
 	//increases or resets currentPwm; this is a trickery, from chatgpt, like modulo but faster
-	currentPwm = (currentPwm + 1) & RESOLUTION;
+	currentPwm = (currentPwm + 1) & PWM_RESOLUTION;
 
 	//clear the interrupt flag
 	TCA0.SINGLE.INTFLAGS = TCA_SINGLE_OVF_bm;
