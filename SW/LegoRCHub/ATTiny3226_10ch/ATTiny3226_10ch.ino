@@ -1,4 +1,4 @@
-#define VERSION 4
+#define VERSION 5
 
 
 //#define DEBUG
@@ -15,7 +15,7 @@
 
 #endif
 #include "IBus.h"
-#include "PinDefinitions.h"
+#include "Config.h"
 #include <Servo_megaTinyCore.h>
 
 
@@ -33,14 +33,14 @@ IBus iBus(&Serial);
 
 
 //state
-volatile pwmPin_t* activePWMChannels[6]
+volatile pwmPin_t* drivenPins[6]
 {
-	&pwmChannels[0],
-	&pwmChannels[2],
-	&pwmChannels[4],
-	&pwmChannels[6],
-	&pwmChannels[8],
-	&pwmChannels[10]
+	&pwmPins[0],
+	&pwmPins[2],
+	&pwmPins[4],
+	&pwmPins[6],
+	&pwmPins[8],
+	&pwmPins[10]
 };
 
 volatile uint16_t previousVals[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -81,7 +81,7 @@ void setup()
 	}
 
 	//attach servos
-	ServoPin::attachAll(servoChannels, servoChannelsCount);
+	ServoPin::attachAll(servoPins, servoPinsCount);
 
 	interrupts();
 
@@ -124,9 +124,12 @@ void loop()
 		mySerial.println();
 #endif
 
-		//first 12 (6*2) channels for pwm pins
+		//first 6 channels are pwm pins (6 x H-bridge; 2 pins per bridge, alternately driven)
 		for (int a = 0; a < 6; a++)
 		{
+			int _2a = 2 * a;
+			int _2a1 = _2a + 1;
+
 			uint16_t val = iBus.channels[iBusMap[a]];
 
 			if (val != previousVals[a])
@@ -139,12 +142,20 @@ void loop()
 					mySerial.print("CH ");
 					mySerial.print(a);
 					mySerial.print(" UP:");
-					mySerial.println(map(val, IBUS_MID, IBUS_MAX, 0, PWM_RESOLUTION));
+					mySerial.println(map(val, IBUS_MID, IBUS_MAX, MIN_PWM, MAX_PWM));
 #endif
 
-					activePWMChannels[a] = &pwmChannels[2 * a];
-					pwmChannels[2 * a].dutyCycle = map(val, IBUS_MID, IBUS_MAX, 0, PWM_RESOLUTION);
-					pwmChannels[(2 * a) + 1].dutyCycle = PWM_OFF;
+					//make sure to switch the proper pin in the drivenPins
+					if (drivenPins[a] != &pwmPins[_2a])
+					{
+						drivenPins[a] = &pwmPins[_2a];
+					}
+
+					//set the duty cycle on the driven pin...
+					drivenPins[a]->dutyCycle = map(val, IBUS_MID, IBUS_MAX, MIN_PWM, MAX_PWM);
+
+					//...and DRIVE the other pin
+					pwmPins[_2a1].port->OUTCLR = pwmPins[_2a1].bitMask;
 				}
 				else if (val < IBUS_MID)
 				{
@@ -152,12 +163,20 @@ void loop()
 					mySerial.print("CH ");
 					mySerial.print(a);
 					mySerial.print(" DOWN:");
-					mySerial.println(map(val, IBUS_MID, IBUS_MIN, 0, PWM_RESOLUTION));
+					mySerial.println(map(val, IBUS_MID, IBUS_MIN, MIN_PWM, MAX_PWM));
 #endif
 
-					activePWMChannels[a] = &pwmChannels[(2 * a) + 1];
-					pwmChannels[2 * a].dutyCycle = PWM_OFF;
-					pwmChannels[(2 * a) + 1].dutyCycle = map(val, IBUS_MID, IBUS_MIN, 0, PWM_RESOLUTION);
+					//make sure to switch the proper pin in the drivenPins
+					if (drivenPins[a] != &pwmPins[_2a1])
+					{
+						drivenPins[a] = &pwmPins[_2a1];
+					}
+
+					//set the duty cycle on the driven pin...
+					drivenPins[a]->dutyCycle = map(val, IBUS_MID, IBUS_MIN, MIN_PWM, MAX_PWM);
+
+					//...and DRIVE the other pin
+					pwmPins[_2a].port->OUTCLR = pwmPins[_2a].bitMask;
 				}
 				else
 				{
@@ -167,34 +186,45 @@ void loop()
 					mySerial.println("MID");
 #endif
 
-					pwmChannels[2 * a].dutyCycle = pwmChannels[(2 * a) + 1].dutyCycle = PWM_OFF;
+					//both pins must be OFF; set the duty cycle, but also drive the pins
+#ifdef PWM_SLOW_DECAY
+					drivenPins[a]->dutyCycle = MAX_PWM;
+
+					pwmPins[_2a].port->OUTSET = pwmPins[_2a].bitMask;
+					pwmPins[_2a1].port->OUTSET = pwmPins[_2a1].bitMask;
+#else
+					drivenPins[a]->dutyCycle = 0;
+
+					pwmPins[_2a].port->OUTCLR = pwmPins[_2a].bitMask;
+					pwmPins[_2a1].port->OUTCLR = pwmPins[_2a1].bitMask;
+#endif
 				}
 			}
 		}
 
 
 #ifdef DEBUG
-		for (int a = 0; a < pwmChannelsCount; a += 2)
+		for (int a = 0; a < pwmPinsCount; a += 2)
 		{
 			mySerial.print("CH ");
 			mySerial.print(a / 2);
 			mySerial.print(" : ");
-			mySerial.print(pwmChannels[a]->dutyCycle);
+			mySerial.print(pwmPins[a]->dutyCycle);
 			mySerial.print(" / ");
-			mySerial.print(pwmChannels[a + 1]->dutyCycle);
+			mySerial.print(pwmPins[a + 1]->dutyCycle);
 			mySerial.println();
 		}
 #endif
 
 		//next 4 channels go to servo pins
-		for (int a = 0; a < servoChannelsCount; a++)
+		for (int a = 0; a < servoPinsCount; a++)
 		{
 			uint16_t val = iBus.channels[iBusMap[a + 6]];
 
 			if (val != previousVals[a + 6])
 			{
 				previousVals[a + 6] = val;
-				servoChannels[a].servo.write(map(val, IBUS_MIN, IBUS_MAX, SERVO_MIN, SERVO_MAX));
+				servoPins[a].servo.write(map(val, IBUS_MIN, IBUS_MAX, SERVO_MIN, SERVO_MAX));
 			}
 		}
 	}
@@ -206,89 +236,59 @@ ISR(TCA0_OVF_vect)
 {
 	static uint8_t currentPwm = 0;
 
+
+	if (currentPwm < drivenPins[0]->dutyCycle)
 	{
-#ifdef PWM_INVERTED
-		if (currentPwm > activePWMChannels[0]->dutyCycle)
-#else
-		if (currentPwm < activePWMChannels[0]->dutyCycle)
-#endif
-		{
-			activePWMChannels[0]->port->OUTSET = activePWMChannels[0]->bitMask; //set pin high
-		}
-		else
-		{
-			activePWMChannels[0]->port->OUTCLR = activePWMChannels[0]->bitMask; //set pin low
-		}
+		drivenPins[0]->port->OUTSET = drivenPins[0]->bitMask; //set pin high
 	}
+	else
 	{
-#ifdef PWM_INVERTED
-		if (currentPwm > activePWMChannels[1]->dutyCycle)
-#else
-		if (currentPwm < activePWMChannels[1]->dutyCycle)
-#endif
-		{
-			activePWMChannels[1]->port->OUTSET = activePWMChannels[1]->bitMask; //set pin high
-		}
-		else
-		{
-			activePWMChannels[1]->port->OUTCLR = activePWMChannels[1]->bitMask; //set pin low
-		}
+		drivenPins[0]->port->OUTCLR = drivenPins[0]->bitMask; //set pin low
 	}
+
+	if (currentPwm < drivenPins[1]->dutyCycle)
 	{
-#ifdef PWM_INVERTED
-		if (currentPwm > activePWMChannels[2]->dutyCycle)
-#else
-		if (currentPwm < activePWMChannels[2]->dutyCycle)
-#endif
-		{
-			activePWMChannels[2]->port->OUTSET = activePWMChannels[2]->bitMask; //set pin high
-		}
-		else
-		{
-			activePWMChannels[2]->port->OUTCLR = activePWMChannels[2]->bitMask; //set pin low
-		}
+		drivenPins[1]->port->OUTSET = drivenPins[1]->bitMask; //set pin high
 	}
+	else
 	{
-#ifdef PWM_INVERTED
-		if (currentPwm > activePWMChannels[3]->dutyCycle)
-#else
-		if (currentPwm < activePWMChannels[3]->dutyCycle)
-#endif
-		{
-			activePWMChannels[3]->port->OUTSET = activePWMChannels[3]->bitMask; //set pin high
-		}
-		else
-		{
-			activePWMChannels[3]->port->OUTCLR = activePWMChannels[3]->bitMask; //set pin low
-		}
+		drivenPins[1]->port->OUTCLR = drivenPins[1]->bitMask; //set pin low
 	}
+
+	if (currentPwm < drivenPins[2]->dutyCycle)
 	{
-#ifdef PWM_INVERTED
-		if (currentPwm > activePWMChannels[4]->dutyCycle)
-#else
-		if (currentPwm < activePWMChannels[4]->dutyCycle)
-#endif
-		{
-			activePWMChannels[4]->port->OUTSET = activePWMChannels[4]->bitMask; //set pin high
-		}
-		else
-		{
-			activePWMChannels[4]->port->OUTCLR = activePWMChannels[4]->bitMask; //set pin low
-		}
+		drivenPins[2]->port->OUTSET = drivenPins[2]->bitMask; //set pin high
 	}
+	else
 	{
-#ifdef PWM_INVERTED
-		if (currentPwm > activePWMChannels[5]->dutyCycle)
-#else
-		if (currentPwm < activePWMChannels[5]->dutyCycle)
-#endif
-		{
-			activePWMChannels[5]->port->OUTSET = activePWMChannels[5]->bitMask; //set pin high
-		}
-		else
-		{
-			activePWMChannels[5]->port->OUTCLR = activePWMChannels[5]->bitMask; //set pin low
-		}
+		drivenPins[2]->port->OUTCLR = drivenPins[2]->bitMask; //set pin low
+	}
+
+	if (currentPwm < drivenPins[3]->dutyCycle)
+	{
+		drivenPins[3]->port->OUTSET = drivenPins[3]->bitMask; //set pin high
+	}
+	else
+	{
+		drivenPins[3]->port->OUTCLR = drivenPins[3]->bitMask; //set pin low
+	}
+
+	if (currentPwm < drivenPins[4]->dutyCycle)
+	{
+		drivenPins[4]->port->OUTSET = drivenPins[4]->bitMask; //set pin high
+	}
+	else
+	{
+		drivenPins[4]->port->OUTCLR = drivenPins[4]->bitMask; //set pin low
+	}
+
+	if (currentPwm < drivenPins[5]->dutyCycle)
+	{
+		drivenPins[5]->port->OUTSET = drivenPins[5]->bitMask; //set pin high
+	}
+	else
+	{
+		drivenPins[5]->port->OUTCLR = drivenPins[5]->bitMask; //set pin low
 	}
 
 	//increases or resets currentPwm; this is a trickery, from chatgpt, like modulo but faster

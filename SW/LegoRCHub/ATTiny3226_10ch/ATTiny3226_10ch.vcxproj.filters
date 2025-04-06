@@ -18,7 +18,7 @@
     <None Include="ATTiny3226_10ch.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PinDefinitions.h">
+    <ClInclude Include="Config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="__vm\.ATTiny3226_10ch.vsarduino.h">

@@ -1,49 +1,51 @@
-#ifndef _PINDEFINITIONS_h
-#define _PINDEFINITIONS_h
+#ifndef _CONFIG_h
+#define _CONFIG_h
 
 
 typedef struct PWMPin
 {
+	PORT_t* port;
 	uint8_t bitMask;
 	uint8_t dutyCycle;
-	PORT_t* port;
 } pwmPin_t;
 
-
-//use this for sinking current pwm pins
-//#define PWM_INVERTED
 
 //IMPORTANT NOTE: this resolution is interdependant on timer A settings and should not be changed per se
 #define PWM_RESOLUTION 31
 
-//max pwm = slow decay (brake); 0 = fast decay (coast)
-#define PWM_OFF 0
+#define MIN_PWM 7
+#define MAX_PWM 32 //+1 for constant on
+
+//use this for braking effect; both pins 1 when idle
+//#define PWM_SLOW_DECAY
+
 
 //IMPORTANT NOTE: maps pwm channels to pins that drive H bridges
 //THIS IS PCB DESIGN DEPENDANT!
-pwmPin_t pwmChannels[6 * 2]
+pwmPin_t pwmPins[6 * 2]
 {
-	{digitalPinToBitMask(PIN_PA5), PWM_OFF, &PORTA}, //ch0_up (ch1_2)
-	{digitalPinToBitMask(PIN_PA4), PWM_OFF, &PORTA}, //ch0_down (ch1_3)
+	{&PORTA, digitalPinToBitMask(PIN_PA5)}, //ch0_up (ch1_2)
+	{&PORTA, digitalPinToBitMask(PIN_PA4)}, //ch0_down (ch1_3)
 
-	{digitalPinToBitMask(PIN_PB5), PWM_OFF, &PORTB}, //ch1_up (ch2_2)
-	{digitalPinToBitMask(PIN_PB4), PWM_OFF, &PORTB}, //ch1_down (ch2_3)
+	{&PORTB, digitalPinToBitMask(PIN_PB5)}, //ch1_up (ch2_2)
+	{&PORTB, digitalPinToBitMask(PIN_PB4)}, //ch1_down (ch2_3)
 
-	{digitalPinToBitMask(PIN_PA7), PWM_OFF, &PORTA}, //ch2_up (ch3_2)
-	{digitalPinToBitMask(PIN_PA6), PWM_OFF, &PORTA}, //ch2_down (ch3_3)
+	{&PORTA, digitalPinToBitMask(PIN_PA7)}, //ch2_up (ch3_2)
+	{&PORTA, digitalPinToBitMask(PIN_PA6)}, //ch2_down (ch3_3)
 
-	{digitalPinToBitMask(PIN_PA3), PWM_OFF, &PORTA}, //ch3_up (ch4_2)
-	{digitalPinToBitMask(PIN_PA2), PWM_OFF, &PORTA}, //ch3_down (ch4_3)
+	{&PORTA, digitalPinToBitMask(PIN_PA3)}, //ch3_up (ch4_2)
+	{&PORTA, digitalPinToBitMask(PIN_PA2)}, //ch3_down (ch4_3)
 
-	{digitalPinToBitMask(PIN_PB1), PWM_OFF, &PORTB}, //ch4_up (ch5_2)
-	{digitalPinToBitMask(PIN_PB2), PWM_OFF, &PORTB}, //ch4_down (ch5_3)
+	{&PORTB, digitalPinToBitMask(PIN_PB1)}, //ch4_up (ch5_2)
+	{&PORTB, digitalPinToBitMask(PIN_PB2)}, //ch4_down (ch5_3)
 
-	{digitalPinToBitMask(PIN_PA1), PWM_OFF, &PORTA}, //ch5_up (ch6_2)
-	{digitalPinToBitMask(PIN_PB0), PWM_OFF, &PORTB}  //ch5_down (ch6_3)
+	{&PORTA, digitalPinToBitMask(PIN_PA1)}, //ch5_up (ch6_2)
+	{&PORTB, digitalPinToBitMask(PIN_PB0)}  //ch5_down (ch6_3)
 };
-const uint8_t pwmChannelsCount = sizeof(pwmChannels) / sizeof(pwmChannels[0]);
+const uint8_t pwmPinsCount = sizeof(pwmPins) / sizeof(pwmPins[0]);
 
 #include <Servo_megaTinyCore.h>
+
 typedef struct ServoPin
 {
 	uint8_t pin;
@@ -65,7 +67,7 @@ typedef struct ServoPin
 //IMPORTANT NOTE: maps servo channels to pins that drive servos
 //THIS IS PCB DESIGN DEPENDANT!
 #ifdef DEBUG
-const servoPin_t servoChannels[3]
+const servoPin_t servoPins[3]
 {
 	//{PIN_PC3, Servo()}, //pin reserved for debug!
 	{PIN_PC0, Servo()}, //ch8
@@ -73,7 +75,7 @@ const servoPin_t servoChannels[3]
 	{PIN_PC1, Servo()} //ch10
 };
 #else
-const servoPin_t servoChannels[4]
+const servoPin_t servoPins[4]
 {
 	{PIN_PC3, Servo()}, //ch7
 	{PIN_PC0, Servo()}, //ch8
@@ -81,7 +83,7 @@ const servoPin_t servoChannels[4]
 	{PIN_PC1, Servo()} //ch10
 };
 #endif
-const uint8_t servoChannelsCount = sizeof(servoChannels) / sizeof(servoChannels[0]);
+const uint8_t servoPinsCount = sizeof(servoPins) / sizeof(servoPins[0]);
 
 #include "IBus.h"
 

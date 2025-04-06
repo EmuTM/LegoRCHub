@@ -1,11 +1,17 @@
 #include "IBus.h"
 
-
+#ifdef DEBUG
 IBus::IBus(HardwareSerial* hardwareSerial, Print* print)
 {
 	this->hardwareSerial = hardwareSerial;
 	this->print = print;
 }
+#else
+IBus::IBus(HardwareSerial* hardwareSerial)
+{
+	this->hardwareSerial = hardwareSerial;
+}
+#endif
 
 void IBus::begin(void)
 {
@@ -18,7 +24,6 @@ bool IBus::loop(void)
 	if (this->hardwareSerial->available())
 	{
 		uint8_t byte = this->hardwareSerial->read();
-		//this->print->println(byte, HEX);
 
 		//first byte must be 0x20
 		if (byte == 0x20)
@@ -46,13 +51,7 @@ bool IBus::loop(void)
 
 					return true;
 				}
-				//else
-				//{
-				//}
 			}
-			//else
-			//{
-			//}
 
 			//reset the index for the next packet
 			this->nextByteInPacket = 0;
@@ -74,8 +73,8 @@ bool IBus::validateChecksum(uint8_t* packet)
 	uint16_t receivedChecksum = (packet[IBUS_PACKET_SIZE - 2] | (packet[IBUS_PACKET_SIZE - 1] << 8));
 
 
-	if (this->print
-		&& calculatedChecksum != receivedChecksum)
+#ifdef DEBUG
+	if (calculatedChecksum != receivedChecksum)
 	{
 		this->print->print("Calc:");
 		this->print->print(calculatedChecksum, HEX);
@@ -92,7 +91,7 @@ bool IBus::validateChecksum(uint8_t* packet)
 		}
 		this->print->println();
 	}
-
+#endif
 
 	return calculatedChecksum == receivedChecksum;
 }
@@ -120,13 +119,12 @@ void IBus::decodeChannels(uint8_t* packet, uint16_t* channels)
 
 	}
 
-	if (this->print)
-	{
+#ifdef DEBUG
 		for (int a = 0; a < IBUS_CHANNEL_COUNT; a++)
 		{
 			this->print->print(channels[a]);
 			this->print->print(";");
 		}
 		this->print->println();
-	}
+#endif
 }
