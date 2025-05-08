@@ -7,7 +7,7 @@
 #define IBUS_CHANNEL_COUNT 14
 #define IBUS_MIN 1000
 #define IBUS_MID 1500
-#define IBUS_MID_TOLERANCE 5
+#define IBUS_MID_TOLERANCE 25
 #define IBUS_MAX 2000
 
 #include "Arduino.h"
