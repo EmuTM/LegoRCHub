@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ATTiny3226_10ch.ino" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -32,5 +29,6 @@
     <ClCompile Include="IBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ATTiny3226_10ch.ino" />
   </ItemGroup>
 </Project>

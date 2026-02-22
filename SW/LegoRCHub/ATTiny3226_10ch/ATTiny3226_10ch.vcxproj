@@ -20,8 +20,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>
-    </PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -80,7 +79,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)..\ATTiny3226_10ch;C:\Users\EmuTM\AppData\Local\arduino15\packages\megaTinyCore\hardware\megaavr\2.6.10\libraries\Servo_megaTinyCore\src;C:\Users\EmuTM\AppData\Local\arduino15\packages\megaTinyCore\hardware\megaavr\2.6.10\cores\megatinycore;C:\Users\EmuTM\AppData\Local\arduino15\packages\megaTinyCore\hardware\megaavr\2.6.10\cores\megatinycore\api;C:\Users\EmuTM\AppData\Local\arduino15\packages\megaTinyCore\hardware\megaavr\2.6.10\variants\txy6;C:\Users\EmuTM\AppData\Local\arduino15\packages\megaTinyCore\hardware\megaavr\2.6.10\cores\megatinycore\api\deprecated;C:\Users\EmuTM\AppData\Local\arduino15\packages\megaTinyCore\hardware\megaavr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ProjectDir)__vm\.ATTiny3226_10ch.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__MEGAAVR_attiny{build.attiny}__;__MEGAAVR_ATTINY{BUILD.ATTINY}__;__MEGAAVR_ATtiny{build.attiny}__;F_CPU=20000000L;CLOCK_SOURCE=0;TWI_MORS;MILLIS_USE_TIMERB1;CORE_ATTACH_ALL;USE_TIMERD0_PWM;ARDUINO=108016;ARDUINO_AVR_ATtiny3226;ARDUINO_ARCH_MEGAAVR;MEGATINYCORE_MAJOR=2UL;MEGATINYCORE_MINOR=6UL;MEGATINYCORE_PATCH=10UL;MEGATINYCORE_RELEASED=1;ARDUINO_attinyxy6;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_VMICRO_INTELLISENSE;__AVR_attiny3226__;__MEGAAVR_ATTINY3226__;__AVR_ATtiny3226__;F_CPU=20000000L;CLOCK_SOURCE=0;TWI_MORS;MILLIS_USE_TIMERB1;CORE_ATTACH_ALL;USE_TIMERD0_PWM;ARDUINO=108016;ARDUINO_AVR_ATtiny3226;ARDUINO_ARCH_MEGAAVR;MEGATINYCORE=2.6.10;MEGATINYCORE_MAJOR=2UL;MEGATINYCORE_MINOR=6UL;MEGATINYCORE_PATCH=10UL;MEGATINYCORE_RELEASED=1;ARDUINO_attinyxy6;__cplusplus=201103L;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -107,9 +106,10 @@
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="ATTiny3226_10ch.ino">
+    <ClCompile Include="ATTiny3226_10ch.ino">
       <FileType>CppCode</FileType>
-    </None>
+      <DeploymentContent>true</DeploymentContent>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IBus.h" />

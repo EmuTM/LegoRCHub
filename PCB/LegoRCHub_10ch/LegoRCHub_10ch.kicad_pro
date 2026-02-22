@@ -59,7 +59,12 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "courtyards_overlap|41387602|23755000|91f6d84b-b051-477e-a87a-72c641ee7fc5|ea4e16a1-3ddb-4574-80d9-99b40a0537f7",
+          ""
+        ]
+      ],
       "meta": {
         "version": 2
       },
@@ -443,7 +448,7 @@
       "extra_units": "error",
       "footprint_filter": "error",
       "footprint_link_issues": "warning",
-      "four_way_junction": "warning",
+      "four_way_junction": "ignore",
       "global_label_dangling": "warning",
       "hier_label_mismatch": "error",
       "label_dangling": "error",
